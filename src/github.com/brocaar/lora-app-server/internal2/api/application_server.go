@@ -270,7 +270,7 @@ func handleDataDb(dev_eui []byte,data []byte){
           var posy int
           err = rows.Scan(&id,&dev_eui_table,&type_table,&room_id_table,&posx,&posy,&floor_id_table)
           if strings.Contains(string(dev_eui_table),string(dev_eui[:])) == true {
-            fmt.Printf("/***********find dev_eui*********/")
+//            fmt.Printf("/***********find dev_eui*********/")
             break
           }
       }
@@ -278,14 +278,14 @@ func handleDataDb(dev_eui []byte,data []byte){
 	timestamp := time.Now().Unix()
 	tm := time.Unix(timestamp, 0)
 	if strings.Contains(string(type_table),"tem_hum")==true && len(string(type_table))==len("tem_hum"){
-	        fmt.Printf("/***********type ==  humi_temp*********/")
+//	        fmt.Printf("/***********type ==  humi_temp*********/")
 		//dev_eui_table=convertByteString(dev_eui)	
 		stmt,err:=db.Prepare("INSERT INTO tem_hum_para(dev_eui,room_id,temp_value,humi_value,datetime,floor_id) VALUES($1,$2,$3,$4,$5,$6)")
 	        temp_value_get=float32(float32(data[0])*10.0+float32(data[1])+float32(data[2])*0.100+float32(data[3])*0.010+0.001)
 		humi_value_get=float32(float32(data[4])*10.0+float32(data[5])+float32(data[6])*0.100+float32(data[7])*0.010+0.001)
 		res ,err :=stmt.Exec(dev_eui_table,room_id_table,temp_value_get,humi_value_get,tm.Format("2006-01-02 03:04:05 PM"),floor_id_table)
 		if err==nil{
-		   fmt.Printf("/***********Insert humi-temp OK!!!!*********/")
+//		   fmt.Printf("/***********Insert humi-temp OK!!!!*********/")
 		}else{
 		   panic(err)
 		}
@@ -313,7 +313,7 @@ func handleDataDb(dev_eui []byte,data []byte){
 		_=err
 	}	
 	if strings.Contains(string(type_table),"door")==true && len(string(type_table))==len("door"){
-		fmt.Printf("/*************************type == door**********/")	
+//		fmt.Printf("/*************************type == door**********/")	
 		stmt,err:=db.Prepare("INSERT INTO door_para(dev_eui,room_id,door_status,datetime,floor_id) VALUES($1,$2,$3,$4,$5)")
 		res ,err :=stmt.Exec(dev_eui_table,room_id_table,data[0],tm.Format("2006-01-02 03:04:05 PM"),floor_id_table)
 		if data[0] == 0x01 {
